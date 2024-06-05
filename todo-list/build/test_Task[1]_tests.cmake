@@ -1,0 +1,5 @@
+add_test([=[TaskTest.MarkCompleted]=]  /Users/ajeetaasthana/IdeaProjects/kernel/todo-list/build/test_Task [==[--gtest_filter=TaskTest.MarkCompleted]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[TaskTest.MarkCompleted]=]  PROPERTIES WORKING_DIRECTORY /Users/ajeetaasthana/IdeaProjects/kernel/todo-list/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[TaskTest.GetDescription]=]  /Users/ajeetaasthana/IdeaProjects/kernel/todo-list/build/test_Task [==[--gtest_filter=TaskTest.GetDescription]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[TaskTest.GetDescription]=]  PROPERTIES WORKING_DIRECTORY /Users/ajeetaasthana/IdeaProjects/kernel/todo-list/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  test_Task_TESTS TaskTest.MarkCompleted TaskTest.GetDescription)

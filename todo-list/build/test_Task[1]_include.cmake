@@ -1,0 +1,5 @@
+if(EXISTS "/Users/ajeetaasthana/IdeaProjects/kernel/todo-list/build/test_Task[1]_tests.cmake")
+  include("/Users/ajeetaasthana/IdeaProjects/kernel/todo-list/build/test_Task[1]_tests.cmake")
+else()
+  add_test(test_Task_NOT_BUILT test_Task_NOT_BUILT)
+endif()
