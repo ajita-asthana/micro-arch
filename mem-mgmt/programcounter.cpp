@@ -12,9 +12,9 @@ void* increment_counter(void* arg) {
         //Uncomment the next line to see the effect of 
         // synchronization
 
-        //pthread_mutex_lock(&lock);
+        pthread_mutex_lock(&lock);
         ++counter;
-        //pthread_mutex_unlock(&lock);
+        pthread_mutex_unlock(&lock);
     }
     return nullptr;
 }
