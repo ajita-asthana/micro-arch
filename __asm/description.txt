@@ -1,0 +1,86 @@
+Compile using the command 
+
+g++ -c dummy.c -o dummy.o
+
+Run the objdump to view the disassembled executable sections
+
+objdump -d dummy.o
+
+dummy.o:	file format mach-o arm64
+
+Disassembly of section __TEXT,__text:
+
+0000000000000000 <ltmp0>:
+       0: a9bf7bfd     	stp	x29, x30, [sp, #-16]!
+       4: 910003fd     	mov	x29, sp
+       8: 90000000     	adrp	x0, 0x0 <ltmp0+0x8>
+       c: 91000000     	add	x0, x0, #0
+      10: 94000000     	bl	0x10 <ltmp0+0x10>
+      14: a8c17bfd     	ldp	x29, x30, [sp], #16
+      18: d65f03c0     	ret
+
+000000000000001c <_main>:
+      1c: d10083ff     	sub	sp, sp, #32
+      20: a9017bfd     	stp	x29, x30, [sp, #16]
+      24: 910043fd     	add	x29, sp, #16
+      28: 52800008     	mov	w8, #0
+      2c: b9000be8     	str	w8, [sp, #8]
+      30: b81fc3bf     	stur	wzr, [x29, #-4]
+      34: 94000000     	bl	0x34 <_main+0x18>
+      38: b9400be0     	ldr	w0, [sp, #8]
+      3c: a9417bfd     	ldp	x29, x30, [sp, #16]
+      40: 910083ff     	add	sp, sp, #32
+      44: d65f03c0     	ret
+
+Explanation:
+
+1. Code Block labeled <ltmp0>
+
+	0000000000000000 <ltmp0> --> starting address at 0x0 labled ltmp0
+	
+
+	0: a9bf7bfd      stp     x29, x30, [sp, #-16]! --> 
+		Opcode: 'a9bf7bfd'
+		Operation: 'stp x29, x30, [sp, #-16]!'
+		Meaning: Store pair ('stp') of registers 'x29' (frame pointer) and 'x30' (link register)
+			 at the address '[sp, #-16]', then update 'sp' to 'sp-16'. This instruction saves the old frame pointer and return 
+			 address on the stack and allocates 16 bytes of stack space.
+
+	4: 910003fd      mov     x29, sp  -->
+		Opcode: 910003fd
+		Operation mov x29, sp
+		Meaning: Move the current stack pointer ('sp') to the frame pointer ('x29'). This sets up the frame pointer for the
+			 current function
+
+	
+		Meaning: Move the current stack pointer ('sp') to the frame pointer ('x29'). This sets up the frame pointer for the
+			 current function
+
+	8: 90000000      adrp    x0, 0x0 <ltmp0+0x8>
+		Opcode: 90000000
+		Operation: adrp    x0, 0x0 <ltmp0+0x8>
+		Meaning: load the page address of the label 0x0 into x0, 'adrp' stands for "address of page". It computes the address by zeroing out the 
+			 lower 12 bits of the label's address, effectively giving the base address of the 4KB page containing the label. Here it, refers to 
+			 'ltmp0+0x8'
+
+	c: 91000000      add     x0, x0, #0
+		Opcode: 91000000
+		Operation: add x0, x0, #0
+		Meaning: Add 0 to the value in 'x0' and store the result back in 'x0'. This is essentially a no-op but often used in conjunction with 
+			 'adrp' address of page to form a complete address.
+
+
+Summary:
+
+	1. Prologue: 
+		a. 'stp x29, x30, [sp, #-16]!': Save the current frame pointer and return address, and allocate stack space. 
+		   'mov x29, sp': Set up the new frame pointer
+
+	2. Function Call Setup:
+		b. adrp x0, 0x0: Load the page address of 0x0 into x0
+		   add x0, x0, #0: Add offset 0 to x0, forming the complete address
+		   bl 0x10: Call the function at address 0x10 and save the return address
+	3. Epilogue: 
+		c. ldp x29, x30, [sp], #16: Restore the old frame pointer and return address, and deallocate stack space.
+		   ret: Return from the function.
+
